@@ -49,8 +49,9 @@ mysql -u root -e "CREATE DATABASE IF NOT EXISTS loadtest_golang; CREATE DATABASE
 ```bash
 cd golang
 go mod tidy
-go run ./cmd/seed    # seed tickets
-go run ./cmd/server  # start on :8080
+go run ./cmd/migrate  # create tables
+go run ./cmd/seed     # seed tickets
+go run ./cmd/server   # start on :8080
 ```
 
 ### 3. Laravel
@@ -81,7 +82,9 @@ Or use the batch files: `k6\run-go.bat`, `k6\run-laravel.bat`
 web-load-tests/
 ├── golang/
 │   ├── cmd/server/main.go         # entry point
+│   ├── cmd/migrate/main.go        # run migrations
 │   ├── cmd/seed/main.go           # ticket seeder
+│   ├── .env                       # database config
 │   └── internal/
 │       ├── config/database.go     # MySQL connection
 │       ├── handlers/              # route handlers
