@@ -1,15 +1,14 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
-import { SharedArray } from 'k6/data';
 import { randomIntBetween, randomItem } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
 
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
 
-const TICKET_IDS = new SharedArray('tickets', function () {
+export function setup() {
   const res = http.get(`${BASE_URL}/api/tickets`);
   check(res, { 'tickets loaded': (r) => r.status === 200 });
-  return res.json('data').map((t) => t.id);
-});
+  return { ticketIds: res.json('data').map((t) => t.id) };
+}
 
 export const options = {
   scenarios: {
@@ -45,7 +44,7 @@ const PHONES = [
   '085789012345', '087901234567', '081456789012', '085890123456',
 ];
 
-export default function () {
+export default function (data) {
   // 1. List tickets
   const ticketsRes = http.get(`${BASE_URL}/api/tickets`);
   check(ticketsRes, {
@@ -54,7 +53,7 @@ export default function () {
   });
 
   // 2. Register participant with random ticket
-  const ticketId = randomItem(TICKET_IDS);
+  const ticketId = randomItem(data.ticketIds);
   const timestamp = Date.now();
   const payload = JSON.stringify({
     name: randomItem(NAMES),
