@@ -1,3 +1,2 @@
-server.exe
-seed.exe
+*.exe
 .env
