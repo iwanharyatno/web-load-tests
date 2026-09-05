@@ -15,7 +15,7 @@ var DB *sql.DB
 func InitDB() {
 	_ = godotenv.Load()
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local&multiStatements=true",
 		getEnv("DB_USER", "root"),
 		getEnv("DB_PASS", ""),
 		getEnv("DB_HOST", "127.0.0.1"),
